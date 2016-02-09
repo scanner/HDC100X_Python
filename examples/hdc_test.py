@@ -12,7 +12,7 @@ import time
 
 # 3rd party imports
 #
-from HDC100x import HDC100x
+from HDC100x.HDC100x import HDC100x
 
 
 #############################################################################
