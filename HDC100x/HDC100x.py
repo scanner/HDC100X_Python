@@ -4,6 +4,12 @@
 #
 """
 Class to read from the HDC100X sensor over I2C on a Raspberry Pi
+
+To setup for reading:
+
+>>> from HDC100x import HDC100x
+>>> hdc = HDC100x()
+>>> temp, humid = hdc.data()
 """
 
 # system imports
@@ -42,13 +48,23 @@ HDC1000_DEVICEID = 0xFF
 #
 class HDC100x(object):
     """
+    Class to read from the HDC100X sensor over I2C on a Raspberry Pi
 
+    To setup for reading:
+
+    >>> from HDC100x import HDC100x
+    >>> hdc = HDC100x()
+    >>> temp, humid = hdc.data()
     """
 
     ####################################################################
     #
     def __init__(self, address=HDC100X_I2CADDR,  i2c_bus=None, **kwargs):
-
+        """
+        By default assumes the default I2C address.  If no I2C module is
+        passed in it will use the default I2C bus on the host it is
+        running on.
+        """
         # Create I2C device. If we were not passed a specific I2C bus
         # then use the default one. Do not like the in-line
         # imports. Adafruit coders need a solid dose of PEP8
@@ -107,7 +123,6 @@ class HDC100x(object):
         sensor is ready for reading after normalizing in a room.
         """
         orig_config = self._device.readU16BE(HDC1000_CONFIG)
-        print "Original config: {}".format(format(orig_config, '016b'))
 
         # reset, heat up, and select 14 bit temp & humidity
         #
@@ -122,12 +137,9 @@ class HDC100x(object):
 
         # Take 1000 readings and toss the results.
         #
-        print "Beginning dry cycle..."
         for i in range(1000):
             self._read32(HDC1000_TEMP)
             time.sleep(0.001)
-
-        print "Finished dry cycle..."
 
         # Write our original config back out to the device.
         #
