@@ -14,3 +14,8 @@ Make sure you have internet access on the device so it can download the required
 
 See examples of usage in the examples folder.
 
+Simple usage:
+
+>>> from HDC100x import HDC100x
+>>> hdc = HDC100x()
+>>> temp, humid = hdc.data()
